@@ -1,0 +1,11 @@
+{% extends 'workshops/base.html' %}
+{% block title %}Home - Semiconductor EdTech Workshops{% endblock %}
+{% block content %}
+<div class="p-4 p-md-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5">
+    <h1 class="display-5 fw-bold">Semiconductor EdTech Workshops</h1>
+    <p class="col-md-8 fs-4">Browse upcoming, live, and completed workshops. Coordinators can log in to create and update workshops, upload agendas, photos, and reports.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'workshop-list' %}?tab=upcoming">Explore Workshops</a>
+  </div>
+</div>
+{% endblock %}

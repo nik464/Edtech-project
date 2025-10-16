@@ -1,0 +1,56 @@
+{% extends 'workshops/base.html' %}
+{% block title %}Workshops{% endblock %}
+{% block content %}
+<h2>Workshops</h2>
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item"><a class="nav-link {% if tab == 'upcoming' %}active{% endif %}" href="?tab=upcoming">Upcoming</a></li>
+  <li class="nav-item"><a class="nav-link {% if tab == 'live' %}active{% endif %}" href="?tab=live">Live</a></li>
+  <li class="nav-item"><a class="nav-link {% if tab == 'completed' %}active{% endif %}" href="?tab=completed">Completed</a></li>
+</ul>
+<form class="row g-2 mb-3">
+  <input type="hidden" name="tab" value="{{ tab }}">
+  <div class="col-sm-3"><input name="topic" class="form-control" placeholder="Topic/Title" value="{{ request.GET.topic }}"></div>
+  <div class="col-sm-2"><input name="location" class="form-control" placeholder="City/Institute/State" value="{{ request.GET.location }}"></div>
+  <div class="col-sm-2">
+    <select class="form-select" name="mode">
+      <option value="">Any Mode</option>
+      <option value="physical" {% if request.GET.mode == 'physical' %}selected{% endif %}>Physical</option>
+      <option value="online" {% if request.GET.mode == 'online' %}selected{% endif %}>Online</option>
+    </select>
+  </div>
+  <div class="col-sm-2"><input type="date" name="start" class="form-control" value="{{ request.GET.start }}"></div>
+  <div class="col-sm-2"><input type="date" name="end" class="form-control" value="{{ request.GET.end }}"></div>
+  <div class="col-sm-1 d-grid"><button class="btn btn-primary">Search</button></div>
+</form>
+
+<div class="row row-cols-1 row-cols-md-2 g-3">
+  {% for w in workshops %}
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title"><a href="{% url 'workshop-detail' w.pk %}">{{ w.title }}</a></h5>
+        <div class="small text-muted">{{ w.start_date }}{% if w.end_date %} - {{ w.end_date }}{% endif %} • {{ w.get_mode_display }}</div>
+        <div>{{ w.city }} {{ w.state }}</div>
+        {% if w.registration_link %}
+          <a class="btn btn-sm btn-success mt-2" href="{{ w.registration_link }}" target="_blank">Register</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p>No workshops found.</p>
+  {% endfor %}
+</div>
+
+<nav aria-label="Page navigation" class="mt-3">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ request.GET.urlencode }}">Prev</a></li>
+    {% endif %}
+    <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+    {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}">Next</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'workshops/base.html' %}
+{% block title %}Workshop Form{% endblock %}
+{% block content %}
+<h2>{% if form.instance.pk %}Edit Workshop{% else %}Create Workshop{% endif %}</h2>
+<form method="post" enctype="multipart/form-data" class="row g-3">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for field in form %}
+    <div class="col-md-6">
+      <label class="form-label">{{ field.label }}{% if field.field.required %}*{% endif %}</label>
+      {{ field }}
+      {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+      {% for e in field.errors %}<div class="form-error">{{ e }}</div>{% endfor %}
+    </div>
+  {% endfor %}
+  <div class="col-12">
+    <button class="btn btn-primary">Save</button>
+  </div>
+</form>
+{% endblock %}
